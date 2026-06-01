@@ -1,0 +1,31 @@
+# Build outputs
+bin/
+obj/
+publish/
+dist/
+*.db
+*.db-shm
+*.db-wal
+logs/
+crashes/
+screenshots/
+traces/
+Release/
+
+# IDE
+.vs/
+*.user
+.idea/
+
+# Build artifacts
+*.ico
+*.bmp
+*.pdb
+*.nupkg
+
+# Secrets
+*.pfx
+*.p12
+*.pem
+appsettings.*.json
+secrets.json

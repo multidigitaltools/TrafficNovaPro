@@ -1,0 +1,129 @@
+<UserControl x:Class="TrafficNova.Pages.SessionLogPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Session Log" Style="{StaticResource HeadingLarge}"/>
+                    <TextBlock Text="{Binding TotalCount, StringFormat='{}Showing {0} sessions'}"
+                               Style="{StaticResource BodySecondary}" Margin="0,2,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="⬇  Export CSV"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding ExportCsvCommand}"
+                        VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Filter bar -->
+        <Border Grid.Row="1" Background="{DynamicResource CardBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="16,8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Campaign:" VerticalAlignment="Center"
+                           Style="{StaticResource BodySecondary}" Margin="0,0,6,0"/>
+                <ComboBox ItemsSource="{Binding CampaignNames}"
+                          SelectedItem="{Binding FilterCampaign}"
+                          Width="160" Margin="0,0,16,0"/>
+                <TextBlock Text="Status:" VerticalAlignment="Center"
+                           Style="{StaticResource BodySecondary}" Margin="0,0,6,0"/>
+                <ComboBox ItemsSource="{Binding StatusFilters}"
+                          SelectedItem="{Binding FilterStatus}"
+                          Width="100" Margin="0,0,16,0"/>
+                <TextBlock Text="From:" VerticalAlignment="Center"
+                           Style="{StaticResource BodySecondary}" Margin="0,0,6,0"/>
+                <DatePicker SelectedDate="{Binding FromDate}" Width="130" Margin="0,0,8,0"/>
+                <TextBlock Text="To:" VerticalAlignment="Center"
+                           Style="{StaticResource BodySecondary}" Margin="0,0,6,0"/>
+                <DatePicker SelectedDate="{Binding ToDate}" Width="130" Margin="0,0,16,0"/>
+                <Button Content="↺ Refresh" Style="{StaticResource ToolbarButtonStyle}"
+                        Command="{Binding LoadCommand}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="2" Margin="24,16,24,0"
+                  x:Name="SessionGrid"
+                  ItemsSource="{Binding Sessions}"
+                  IsReadOnly="True"
+                  MouseDoubleClick="OnSessionDoubleClick"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"       Width="60"  Binding="{Binding Id}"/>
+                <!-- Campaign: resolve id → name via VM's lookup dictionary -->
+                <DataGridTemplateColumn Header="Campaign" Width="130" SortMemberPath="CampaignId">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource CampaignIdToNameConverter}">
+                                        <Binding Path="CampaignId"/>
+                                        <Binding Path="DataContext.CampaignNamesById"
+                                                 RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="URL"      Width="2*"  Binding="{Binding TargetUrl}"/>
+                <DataGridTextColumn Header="Started"  Width="140"
+                                    Binding="{Binding StartedAt, StringFormat='{}{0:MM-dd HH:mm:ss}'}"/>
+                <DataGridTextColumn Header="Duration" Width="80"
+                                    Binding="{Binding DurationMs, StringFormat='{}{0} ms', TargetNullValue='—'}"/>
+                <DataGridTemplateColumn Header="Result" Width="70">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Success, Converter={StaticResource BoolToResultConverter}}"
+                                       Foreground="{Binding Success, Converter={StaticResource BoolToResultColorConverter}}"
+                                       FontWeight="SemiBold" VerticalAlignment="Center" Padding="4,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="HTTP"  Width="50"  Binding="{Binding StatusCode, TargetNullValue='—'}"/>
+                <DataGridTextColumn Header="Dwell" Width="70"
+                                    Binding="{Binding DwellMs, StringFormat='{}{0} ms'}"/>
+                <DataGridTextColumn Header="Blocked" Width="65"
+                                    Binding="{Binding BlockedRequests}"/>
+                <DataGridTextColumn Header="Proxy" Width="60"  Binding="{Binding ProxyId, TargetNullValue='—'}"/>
+                <DataGridTextColumn Header="Error" Width="*"   Binding="{Binding ErrorMessage, TargetNullValue=''}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Pagination bar -->
+        <Border Grid.Row="3" Background="{DynamicResource CardBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0"
+                Padding="16,8" Margin="24,0,24,24">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="◀ Prev" Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding PreviousPageCommand}" Width="80"/>
+                <TextBlock Margin="16,0" VerticalAlignment="Center"
+                           Style="{StaticResource BodySecondary}">
+                    <Run Text="Page "/>
+                    <Run Text="{Binding PageIndex, Converter={StaticResource PageIndexConverter}}"/>
+                    <Run Text=" of "/>
+                    <Run Text="{Binding TotalPages}"/>
+                </TextBlock>
+                <Button Content="Next ▶" Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding NextPageCommand}" Width="80"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

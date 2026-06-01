@@ -1,0 +1,66 @@
+<UserControl x:Class="TrafficNova.Pages.CampaignHistoryPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource CardBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Panel header -->
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,1"
+                Padding="16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="PanelTitle" Text="Session History"
+                               FontWeight="SemiBold" FontSize="13"
+                               Foreground="{DynamicResource TextBrush}"/>
+                    <TextBlock x:Name="PanelSubtitle" Text="Select a campaign to see its sessions"
+                               Style="{StaticResource BodySecondary}" Margin="0,2,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="✕" Click="Close_Click"
+                        Style="{StaticResource ToolbarButtonStyle}"
+                        ToolTip="Close history panel"
+                        VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Session grid -->
+        <DataGrid Grid.Row="1"
+                  x:Name="SessionGrid"
+                  IsReadOnly="True"
+                  MaxHeight="220"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VerticalScrollBarVisibility="Auto">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#"  Width="50"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="URL" Width="2*" Binding="{Binding TargetUrl}"/>
+                <DataGridTextColumn Header="Started" Width="140"
+                                    Binding="{Binding StartedAt, StringFormat='{}{0:MM-dd HH:mm:ss}'}"/>
+                <DataGridTextColumn Header="Duration" Width="80"
+                                    Binding="{Binding DurationMs, StringFormat='{}{0} ms', TargetNullValue='—'}"/>
+                <DataGridTemplateColumn Header="Result" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding Success, Converter={StaticResource BoolToResultConverter}}"
+                                Foreground="{Binding Success, Converter={StaticResource BoolToResultColorConverter}}"
+                                FontWeight="SemiBold" VerticalAlignment="Center" Padding="4,0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Status" Width="60" Binding="{Binding StatusCode, TargetNullValue='—'}"/>
+                <DataGridTextColumn Header="Error" Width="*" Binding="{Binding ErrorMessage, TargetNullValue=''}"/>
+            </DataGrid.Columns>
+
+        </DataGrid>
+    </Grid>
+</UserControl>

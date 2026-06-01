@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TrafficNova Pro — app icon (vector master)
+  Design notes:
+    · Rounded square in the brand blue gradient (#1E3A8A → #2563EB)
+    · 8 subtle "nova" rays radiating from the centre (the brand's traffic-burst motif)
+    · Soft glow core unifies the rays
+    · Bold white "N" — recognisable at every shell size from 16 px upward
+  Re-export to .ico via installer/make-icon.ps1 (System.Drawing).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="60%"  stop-color="#FFFFFF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect x="0" y="0" width="256" height="256" rx="46" ry="46" fill="url(#bg)"/>
+
+  <!-- Nova rays (8, at 45° intervals) -->
+  <g transform="translate(128 128)" fill="#FFFFFF" fill-opacity="0.18">
+    <polygon points="0,-100 12,0 -12,0"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(45)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(90)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(135)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(180)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(225)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(270)"/>
+    <polygon points="0,-100 12,0 -12,0" transform="rotate(315)"/>
+  </g>
+
+  <!-- Soft centre glow (sits behind the letter) -->
+  <circle cx="128" cy="128" r="60" fill="url(#glow)"/>
+
+  <!-- Bold "N" -->
+  <text x="128" y="128"
+        font-family="Segoe UI, Inter, system-ui, sans-serif"
+        font-weight="800" font-size="156"
+        fill="#FFFFFF"
+        text-anchor="middle" dominant-baseline="central">N</text>
+</svg>

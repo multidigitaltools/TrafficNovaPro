@@ -1,0 +1,106 @@
+<Window x:Class="TrafficNova.Dialogs.ProxyImportDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Title="Import Proxies"
+        Width="560" Height="520"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="{DynamicResource BackgroundBrush}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Import Proxies" Style="{StaticResource HeadingSmall}" Margin="0,0,0,12"/>
+
+        <!-- Format hint -->
+        <Border Grid.Row="1" Background="{DynamicResource InfoBackgroundBrush}" CornerRadius="6" Padding="12,8" Margin="0,0,0,12">
+            <TextBlock TextWrapping="Wrap" FontSize="{StaticResource FontSizeSM}"
+                       Foreground="{DynamicResource PrimaryBrush}">
+                Supported formats (one per line):<LineBreak/>
+                • host:port<LineBreak/>
+                • protocol://host:port<LineBreak/>
+                • host:port:user:pass<LineBreak/>
+                • protocol://user:pass@host:port
+            </TextBlock>
+        </Border>
+
+        <!-- Text input area -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Paste proxies below or load from file:"
+                               Style="{StaticResource BodySecondary}" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Content="📂 Load File"
+                            Style="{StaticResource ToolbarButtonStyle}"
+                            Padding="8,4" Click="LoadFile_Click"/>
+                </Grid>
+                <TextBox Grid.Row="1" x:Name="ProxyTextBox"
+                         AcceptsReturn="True" AcceptsTab="False"
+                         VerticalScrollBarVisibility="Auto"
+                         FontFamily="{StaticResource MonoFont}"
+                         FontSize="12"
+                         Padding="8"
+                         BorderThickness="0,1,0,0"
+                         BorderBrush="{DynamicResource BorderBrush}"
+                         TextChanged="ProxyTextBox_Changed"
+                         hc:InfoElement.Placeholder="192.168.1.1:8080&#x0a;socks5://10.0.0.1:1080&#x0a;..."/>
+            </Grid>
+        </Border>
+
+        <!-- Preview stats -->
+        <Border Grid.Row="3" Background="Transparent" Margin="0,8,0,8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="ParsedCount" Style="{StaticResource BodySecondary}"
+                           Foreground="{DynamicResource SuccessBrush}" Margin="0,0,16,0">
+                    <Run Text="✓ "/>
+                    <Run x:Name="ValidCount" Text="0"/>
+                    <Run Text=" valid"/>
+                </TextBlock>
+                <TextBlock x:Name="ErrorCount" Style="{StaticResource BodySecondary}"
+                           Foreground="{DynamicResource ErrorBrush}">
+                    <Run Text="✗ "/>
+                    <Run x:Name="InvalidCount" Text="0"/>
+                    <Run Text=" invalid lines"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- Group assignment + buttons -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Assign group:" VerticalAlignment="Center"
+                       Style="{StaticResource BodySecondary}" Margin="0,0,8,0"/>
+            <TextBox Grid.Column="1" x:Name="GroupTagBox"
+                     hc:InfoElement.Placeholder="optional" Margin="0,0,12,0"/>
+            <StackPanel Grid.Column="2"/>
+            <Button Grid.Column="3" Content="Cancel" Style="{StaticResource SecondaryButtonStyle}"
+                    Width="90" Margin="0,0,12,0" Click="Cancel_Click"/>
+            <Button Grid.Column="4" x:Name="ImportBtn" Content="Import"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Width="90" Click="Import_Click" IsEnabled="False"/>
+        </Grid>
+
+    </Grid>
+</Window>

@@ -1,0 +1,605 @@
+<UserControl x:Class="TrafficNova.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:TrafficNova.ViewModels"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <UserControl.Resources>
+        <!-- Section header style -->
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource HeadingSmall}">
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+        </Style>
+
+        <!-- Field label style -->
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Field hint style -->
+        <Style x:Key="HintStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyMuted}">
+            <Setter Property="Margin" Value="0,2,0,0"/>
+        </Style>
+
+        <!-- Row panel: label + control stacked vertically -->
+        <Style x:Key="FieldRowStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- Tab item style -->
+        <Style x:Key="SettingsTabItemStyle" TargetType="TabItem">
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Bd" Background="Transparent"
+                                BorderBrush="Transparent" BorderThickness="0,0,0,3"
+                                Padding="{TemplateBinding Padding}" Cursor="Hand">
+                            <ContentPresenter ContentSource="Header"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush"
+                                        Value="{DynamicResource PrimaryBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Inline NumericUpDown-like int TextBox (narrow) -->
+        <Style x:Key="NarrowTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Wide TextBox -->
+        <Style x:Key="WideTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="MaxWidth" Value="480"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="480"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1"
+                Padding="28,18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Settings" Style="{StaticResource HeadingLarge}"/>
+                    <TextBlock Text="Configure application behaviour, browser engine, proxies and notifications."
+                               Style="{StaticResource BodySecondary}" Margin="0,4,0,0"/>
+                </StackPanel>
+                <!-- Status message -->
+                <TextBlock Grid.Column="1" Text="{Binding StatusMessage}"
+                           Foreground="{DynamicResource SuccessBrush}"
+                           FontWeight="SemiBold" FontSize="13"
+                           VerticalAlignment="Center"
+                           Visibility="{Binding StatusMessage,
+                               Converter={StaticResource StringNonEmptyToVisibleConverter}}"/>
+            </Grid>
+        </Border>
+
+        <!-- Tab content -->
+        <TabControl Grid.Row="1"
+                    BorderThickness="0"
+                    Background="{DynamicResource BackgroundBrush}"
+                    Padding="0">
+            <TabControl.Resources>
+                <Style TargetType="TabPanel">
+                    <Setter Property="Background" Value="{DynamicResource CardBrush}"/>
+                </Style>
+                <Style TargetType="TabControl">
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 1 — General
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="General" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="General" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Startup Behaviour" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox Content="Launch TrafficNova Pro when Windows starts"
+                                              IsChecked="{Binding LaunchOnStartup, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox x:Name="ChkMinimizeTray"
+                                              Content="Minimize to system tray on close"
+                                              IsChecked="{Binding MinimizeToTrayOnClose, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}" Margin="0,0,0,0">
+                                    <CheckBox Content="Check for updates on startup"
+                                              IsChecked="{Binding CheckForUpdatesOnStartup, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Interface" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Language" Style="{StaticResource FieldLabelStyle}"/>
+                                    <ComboBox Width="180" HorizontalAlignment="Left" IsEnabled="False">
+                                        <ComboBoxItem Content="English (v1 only)" IsSelected="True"/>
+                                    </ComboBox>
+                                    <TextBlock Text="Multi-language support planned for v2."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock Text="Theme" Style="{StaticResource FieldLabelStyle}"/>
+                                    <ComboBox x:Name="CbTheme" Width="180" HorizontalAlignment="Left"
+                                              ItemsSource="{Binding ThemeOptions}"
+                                              SelectedItem="{Binding Theme, Mode=TwoWay}"/>
+                                    <TextBlock Text="Switches immediately — no restart needed."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 2 — Browser
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="Browser" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="Browser Engine" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Default Options" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox Content="Run browser headless by default"
+                                              IsChecked="{Binding DefaultHeadlessMode, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                    <TextBlock Text="Individual campaigns can override this."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Browser Executable (optional)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" MaxWidth="360"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding BrowserExecutablePath, Mode=TwoWay}"
+                                                 Width="360"/>
+                                        <Button Grid.Column="1" Content="Browse…"
+                                                Command="{Binding BrowseBrowserPathCommand}"
+                                                Style="{StaticResource SecondaryButtonStyle}"
+                                                Margin="8,0,0,0" Padding="12,8"/>
+                                    </Grid>
+                                    <TextBlock Text="Leave blank to use Playwright's bundled Chromium."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Performance" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Max Concurrent Sessions"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="260"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Slider Grid.Column="0"
+                                                Minimum="1" Maximum="200"
+                                                Value="{Binding MaxConcurrentSessions, Mode=TwoWay}"
+                                                VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                        <TextBox Grid.Column="1"
+                                                 Text="{Binding MaxConcurrentSessions, Mode=TwoWay}"
+                                                 Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    </Grid>
+                                    <TextBlock Text="Max simultaneous browser sessions across all campaigns."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Default Session Timeout (seconds)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding DefaultSessionTimeoutSeconds, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Per-campaign timeout for page navigation."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Anti-Detection" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+                                <StackPanel>
+                                    <TextBlock Text="Stealth Intensity"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <ComboBox Width="180" HorizontalAlignment="Left"
+                                              ItemsSource="{Binding StealthOptions}"
+                                              SelectedItem="{Binding StealthIntensity, Mode=TwoWay}"/>
+                                    <TextBlock Style="{StaticResource HintStyle}">
+                                        <Run Text="Low: webdriver flag only.  "/>
+                                        <Run Text="Medium: + plugins/chrome object.  "/>
+                                        <Run Text="High: + WebGL vendor, cdc_ cleanup."/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 3 — Proxy
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="Proxy" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="Proxy Management" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="Import &amp; Health Check" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox Content="Auto-test proxies on import"
+                                              IsChecked="{Binding AutoTestProxiesOnImport, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Health Check Interval (minutes)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding ProxyHealthCheckIntervalMinutes, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Background health checks run at this interval."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Dead Proxy Threshold (consecutive failures)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding ProxyDeadThreshold, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Proxy is disabled after this many consecutive failures."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Proxy Test URL" Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding ProxyTestUrl, Mode=TwoWay}"
+                                             Style="{StaticResource WideTextBoxStyle}"/>
+                                    <TextBlock Text="URL used during health checks (e.g. https://httpbin.org/ip)."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 4 — Scheduler
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="Scheduler" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="Campaign Scheduler" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox Content="Enable campaign scheduler"
+                                              IsChecked="{Binding EnableScheduler, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                    <TextBlock Text="When disabled, scheduled jobs will not trigger automatically."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Max Simultaneous Campaigns"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding MaxSimultaneousCampaigns, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Scheduler will queue additional jobs when limit is reached."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Scheduler Timezone"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding SchedulerTimezone, Mode=TwoWay}"
+                                             Style="{StaticResource WideTextBoxStyle}"/>
+                                    <TextBlock Text="IANA timezone ID (e.g. UTC, America/New_York, Europe/London)."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 5 — Notifications
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="Notifications" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="Notifications &amp; Alerts"
+                                   Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <CheckBox Content="Enable desktop toast notifications"
+                                              IsChecked="{Binding EnableDesktopNotifications, Mode=TwoWay}"
+                                              FontSize="13" Cursor="Hand"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Summary Email" Style="{StaticResource FieldLabelStyle}"/>
+                                    <Button Content="Configure Summary Email (coming soon)"
+                                            Command="{Binding SendSummaryEmailCommand}"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            HorizontalAlignment="Left" Padding="14,8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Alert Thresholds" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Proxy Count Low Alert (remaining proxies)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding ProxyLowAlertThreshold, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Toast alert fires when active proxy count drops below this."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Error Rate Alert Threshold (0.0 – 1.0)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding ErrorRateAlertThreshold, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Alert fires when session error rate exceeds this fraction (e.g. 0.5 = 50%)."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 6 — Logging
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="Logging" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="Logging" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Log Level" Style="{StaticResource FieldLabelStyle}"/>
+                                    <ComboBox Width="180" HorizontalAlignment="Left"
+                                              ItemsSource="{Binding LogLevels}"
+                                              SelectedItem="{Binding LogLevel, Mode=TwoWay}"/>
+                                    <TextBlock Text="Minimum severity level written to disk."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Log Retention (days)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding LogRetentionDays, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Session records older than this are deleted on startup."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Max Log File Size (MB)"
+                                               Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding MaxLogFileSizeMb, Mode=TwoWay}"
+                                             Style="{StaticResource NarrowTextBoxStyle}"/>
+                                    <TextBlock Text="Rolling log file is rotated when it reaches this size."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+
+                                <Button Content="Open Log Folder"
+                                        Command="{Binding OpenLogFolderCommand}"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        HorizontalAlignment="Left" Padding="14,8"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ══════════════════════════════════════════════════════════
+                 TAB 7 — License
+            ════════════════════════════════════════════════════════════ -->
+            <TabItem Header="License" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,24">
+                    <StackPanel MaxWidth="640" HorizontalAlignment="Left">
+
+                        <TextBlock Text="License &amp; Activation"
+                                   Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                            <StackPanel>
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="License Key" Style="{StaticResource FieldLabelStyle}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" MaxWidth="320"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding LicenseKey, Mode=TwoWay}"
+                                                 Width="320"/>
+                                        <Button Grid.Column="1" Content="Activate"
+                                                Command="{Binding ActivateLicenseCommand}"
+                                                Style="{StaticResource PrimaryButtonStyle}"
+                                                Margin="8,0,0,0" Padding="14,8"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Style="{StaticResource FieldRowStyle}">
+                                    <TextBlock Text="Status" Style="{StaticResource FieldLabelStyle}"/>
+                                    <!-- BUG-058: hardcoded light-green badge was invisible in dark theme -->
+                                    <Border CornerRadius="4" Padding="10,5" HorizontalAlignment="Left"
+                                            Background="{DynamicResource SuccessBackgroundBrush}">
+                                        <TextBlock Text="{Binding LicenseStatus}"
+                                                   FontWeight="SemiBold" FontSize="13"
+                                                   Foreground="{DynamicResource SuccessBrush}"/>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="Machine ID" Style="{StaticResource FieldLabelStyle}"/>
+                                    <TextBox Text="{Binding MachineId, Mode=OneWay}"
+                                             IsReadOnly="True"
+                                             Style="{StaticResource NarrowTextBoxStyle}"
+                                             Width="200"
+                                             FontFamily="Consolas" FontSize="12"/>
+                                    <TextBlock Text="Provide this ID to support when activating a node-locked license."
+                                               Style="{StaticResource HintStyle}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- BUG-073: FlareSolverrUrl was duplicated here; canonical field is on Advanced tab -->
+
+                        <Border Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Settings Backup" FontWeight="SemiBold"
+                                           FontSize="13" Margin="0,0,0,12"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Export Settings"
+                                            Command="{Binding ExportSettingsCommand}"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Padding="14,8" Margin="0,0,8,0"/>
+                                    <Button Content="Import Settings"
+                                            Command="{Binding ImportSettingsCommand}"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Padding="14,8"/>
+                                </StackPanel>
+                                <TextBlock Text="Export / import all settings as a JSON file."
+                                           Style="{StaticResource HintStyle}" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- ── Advanced Tab (BUG-061: FlareSolverrUrl was inaccessible) ── -->
+            <TabItem Header="Advanced" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="28,24">
+                        <TextBlock Text="Advanced" Style="{StaticResource SectionHeaderStyle}"/>
+
+                        <StackPanel Style="{StaticResource FieldRowStyle}">
+                            <TextBlock Text="FlareSolverr URL" Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBox Text="{Binding FlareSolverrUrl, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource WideTextBoxStyle}"/>
+                            <TextBlock Style="{StaticResource HintStyle}"
+                                       Text="Used to bypass Cloudflare IUAM challenges. Leave blank to disable."/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- ── Bottom action bar ──────────────────────────────────────── -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0"
+                Padding="28,14">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Reset to Defaults"
+                        Command="{Binding ResetDefaultsCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Padding="16,9" Margin="0,0,12,0"/>
+                <Button x:Name="BtnSaveSettings" Content="Save Settings"
+                        Command="{Binding SaveCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Padding="20,9"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</UserControl>

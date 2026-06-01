@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- WinForms is used only for the tray NotifyIcon (via explicit aliases).
+         Disable its implicit global usings so System.Windows.Forms / System.Drawing
+         don't collide with WPF's UserControl / Application / Brush. -->
+    <EnableWindowsFormsImplicitUsings>false</EnableWindowsFormsImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>TrafficNova</AssemblyName>
+    <RootNamespace>TrafficNova</RootNamespace>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <Product>TrafficNova Pro</Product>
+    <AssemblyTitle>TrafficNova Pro</AssemblyTitle>
+    <Description>Professional web traffic bot with proxy support and advanced browser automation.</Description>
+    <Company>MultiDigitalTools</Company>
+    <Authors>MultiDigitalTools</Authors>
+    <Copyright>© 2026 MultiDigitalTools. All rights reserved.</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('app.ico')">
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- Remove WinForms implicit global usings: they collide with WPF
+       (UserControl/Application/Brush). WinForms is used only via explicit
+       aliases in App.xaml.cs for the tray NotifyIcon. -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrafficNova.Core\TrafficNova.Core.csproj" />
+    <ProjectReference Include="..\TrafficNova.Data\TrafficNova.Data.csproj" />
+    <ProjectReference Include="..\TrafficNova.Engine\TrafficNova.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- UI controls -->
+    <PackageReference Include="HandyControl" Version="3.*" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+
+    <!-- Charts -->
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.*" />
+
+    <!-- DI -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.*" />
+
+    <!-- Logging -->
+    <PackageReference Include="Serilog" Version="4.*" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.*" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.*" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="8.*" />
+
+    <!-- Export -->
+    <PackageReference Include="EPPlus" Version="7.*" />
+  </ItemGroup>
+
+</Project>

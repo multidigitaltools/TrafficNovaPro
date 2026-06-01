@@ -1,0 +1,80 @@
+<UserControl x:Class="TrafficNova.Pages.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{DynamicResource BackgroundBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="40" MaxWidth="600" HorizontalAlignment="Center">
+
+            <!-- Logo -->
+            <Ellipse Width="80" Height="80" HorizontalAlignment="Center" Margin="0,0,0,20">
+                <Ellipse.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="{DynamicResource LogoGradientStartColor}" Offset="0"/>
+                        <GradientStop Color="{DynamicResource LogoGradientEndColor}" Offset="1"/>
+                    </RadialGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
+
+            <!-- App Name + Version -->
+            <TextBlock Text="TrafficNova Pro" Style="{StaticResource HeadingLarge}"
+                       HorizontalAlignment="Center" Margin="0,0,0,4"/>
+            <TextBlock x:Name="VersionLabel" Text="Version 1.0.0"
+                       Style="{StaticResource BodySecondary}"
+                       HorizontalAlignment="Center" Margin="0,0,0,8"/>
+            <TextBlock Text="Professional Web Traffic Bot"
+                       Style="{StaticResource BodySecondary}"
+                       HorizontalAlignment="Center" Margin="0,0,0,32"/>
+
+            <!-- Description -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="About" Style="{StaticResource HeadingSmall}" Margin="0,0,0,12"/>
+                    <TextBlock TextWrapping="Wrap" LineHeight="22"
+                               Text="TrafficNova Pro is a professional web traffic bot that uses Playwright browser automation to generate realistic, human-like website visits. Built with .NET 10 and WPF, it features proxy rotation, campaign scheduling, real-time analytics, and advanced stealth techniques."/>
+                </StackPanel>
+            </Border>
+
+            <!-- Tech Stack -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Built With" Style="{StaticResource HeadingSmall}" Margin="0,0,0,12"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text=".NET 10 + WPF" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="HandyControl 3.x" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Playwright" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="EF Core + SQLite" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="CommunityToolkit.Mvvm" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="LiveCharts2" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Serilog" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                            <TextBlock Text="Inno Setup 6" Style="{StaticResource BodySecondary}" Margin="0,0,0,4"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- License + Update check -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="License" Style="{StaticResource HeadingSmall}" Margin="0,0,0,12"/>
+                    <TextBlock x:Name="LicenseStatusText" Text="Status: Trial" Style="{StaticResource BodySecondary}" Margin="0,0,0,8"/>
+                    <Button Content="Check for Updates"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            HorizontalAlignment="Left"
+                            Click="CheckUpdates_Click"/>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="© 2026 MultiDigitalTools. All rights reserved."
+                       Style="{StaticResource BodyMuted}"
+                       HorizontalAlignment="Center" Margin="0,8,0,0"/>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,133 @@
+<UserControl x:Class="TrafficNova.Pages.DashboardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
+
+            <!-- ── Header ── -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Dashboard" Style="{StaticResource HeadingLarge}"/>
+                    <TextBlock Text="Real-time traffic overview"
+                               Style="{StaticResource BodySecondary}" Margin="0,2,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Content="{Binding IsPaused, Converter={StaticResource PauseButtonTextConverter}}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding TogglePauseCommand}"
+                        VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- ── Stat Cards ── -->
+            <UniformGrid Rows="1" Columns="4" Margin="0,0,0,20">
+
+                <Border Style="{StaticResource StatCardStyle}" Margin="0,0,8,0">
+                    <StackPanel>
+                        <TextBlock Text="VISITS TODAY" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding TotalVisitsToday}"
+                                   FontSize="32" FontWeight="Bold"
+                                   Foreground="{DynamicResource PrimaryBrush}"/>
+                        <TextBlock Text="Total recorded" Style="{StaticResource BodySecondary}"/>
+                        <!-- Sparkline (Step 65) -->
+                        <lvc:CartesianChart Series="{Binding SparklineSeries}"
+                                            Height="36" Margin="0,8,0,0"
+                                            Background="Transparent"
+                                            TooltipPosition="Hidden"
+                                            LegendPosition="Hidden"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource StatCardStyle}" Margin="4,0,4,0">
+                    <StackPanel>
+                        <TextBlock Text="ACTIVE SESSIONS" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding ActiveSessions}"
+                                   FontSize="32" FontWeight="Bold"
+                                   Foreground="{DynamicResource StatusRunningBrush}"/>
+                        <TextBlock Text="Running now" Style="{StaticResource BodySecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource StatCardStyle}" Margin="4,0,4,0">
+                    <StackPanel>
+                        <TextBlock Text="SUCCESS RATE" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBlock FontSize="32" FontWeight="Bold"
+                                   Foreground="{DynamicResource SuccessBrush}">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0:P1}">
+                                    <Binding Path="SuccessRate"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Text="All sessions today" Style="{StaticResource BodySecondary}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource StatCardStyle}" Margin="8,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="PROXIES ONLINE" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding ProxiesOnline}"
+                                   FontSize="32" FontWeight="Bold"
+                                   Foreground="{DynamicResource WarningBrush}"/>
+                        <TextBlock Text="Active proxies" Style="{StaticResource BodySecondary}"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- ── Charts row ── -->
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Visits/hour line chart (Step 63) -->
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Visits per Hour (last 12h)"
+                                   FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   Margin="0,0,0,12"/>
+                        <lvc:CartesianChart Series="{Binding VisitsPerHourSeries}"
+                                            XAxes="{Binding HourAxisX}"
+                                            YAxes="{Binding HourAxisY}"
+                                            Height="200"
+                                            Background="Transparent"
+                                            TooltipPosition="Top"
+                                            LegendPosition="Hidden"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Success/fail pie (Step 64) -->
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Today's Outcome"
+                                   FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{DynamicResource TextBrush}"
+                                   Margin="0,0,0,12"/>
+                        <lvc:PieChart Series="{Binding SuccessPieSeries}"
+                                      Height="200"
+                                      Background="Transparent"
+                                      LegendPosition="Bottom"
+                                      TooltipPosition="Center"
+                                      InitialRotation="-90"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,60 @@
+TRAFFICNOVA PRO — END USER LICENSE AGREEMENT (EULA)
+======================================================
+
+Copyright (c) 2026 MultiDigitalTools. All rights reserved.
+Website: https://multidigitaltools.com
+
+PLEASE READ THIS LICENSE AGREEMENT CAREFULLY BEFORE USING THIS SOFTWARE.
+
+1. GRANT OF LICENSE
+   MultiDigitalTools grants you a non-exclusive, non-transferable license
+   to install and use TrafficNova Pro ("Software") on one computer.
+   You may create one backup copy of the Software.
+
+2. TRIAL LICENSE
+   The Software may be used for evaluation purposes for a period of fourteen
+   (14) days from the date of first installation ("Trial Period").
+   During the Trial Period, the Software is fully functional.
+   After the Trial Period expires, you must purchase a license to continue
+   using the Software.
+
+3. RESTRICTIONS
+   You may NOT:
+   a) Reverse engineer, decompile, or disassemble the Software;
+   b) Rent, lease, lend, or otherwise transfer the Software or license;
+   c) Modify, adapt, translate, or create derivative works;
+   d) Remove any proprietary notices or labels on the Software;
+   e) Use the Software for unlawful purposes or in violation of any
+      applicable law or regulation.
+
+4. OWNERSHIP
+   The Software is owned by MultiDigitalTools and is protected by
+   copyright law and international treaty provisions.
+
+5. DISCLAIMER OF WARRANTIES
+   THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+6. LIMITATION OF LIABILITY
+   IN NO EVENT SHALL MULTIDIGITALTOOLS BE LIABLE FOR ANY INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING
+   OUT OF OR IN CONNECTION WITH THIS SOFTWARE.
+
+7. TERMINATION
+   This license is effective until terminated. It will terminate
+   automatically if you fail to comply with any provision of this agreement.
+
+8. GOVERNING LAW
+   This agreement is governed by applicable law without regard to
+   conflict of law principles.
+
+9. CONTACT
+   MultiDigitalTools
+   https://multidigitaltools.com
+   support@multidigitaltools.com
+
+By installing or using the Software, you agree to be bound by the terms
+of this License Agreement.
+
+END OF LICENSE AGREEMENT

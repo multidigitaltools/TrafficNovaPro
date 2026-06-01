@@ -1,0 +1,240 @@
+<UserControl x:Class="TrafficNova.Pages.ProxiesPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             Background="{DynamicResource BackgroundBrush}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ── Header ── -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Proxy Manager" Style="{StaticResource HeadingLarge}" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource BodySecondary}" VerticalAlignment="Center">
+                <Run Text="{Binding TotalCount}"/>
+                <Run Text=" proxies"/>
+            </TextBlock>
+        </Grid>
+
+        <!-- ── Toolbar ── -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="8,6" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="+ Add" Style="{StaticResource PrimaryButtonStyle}"
+                        Padding="12,6" Margin="0,0,8,0"
+                        Click="AddProxy_Click"/>
+                <Button Content="📥 Import" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Click="ImportProxy_Click"
+                        ToolTip="Import proxies from text or file"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                           Margin="4,0" Width="1" Height="20" Background="{DynamicResource BorderBrush}"/>
+                <Button Content="▶ Test Selected" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Command="{Binding TestSelectedCommand}"
+                        IsEnabled="{Binding SelectedProxy, Converter={StaticResource NotNullToBoolConverter}}"/>
+                <Button Content="▶▶ Test All" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Command="{Binding TestAllCommand}"
+                        IsEnabled="{Binding IsTesting, Converter={StaticResource InverseBoolConverter}}"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                           Margin="4,0" Width="1" Height="20" Background="{DynamicResource BorderBrush}"/>
+                <Button Content="✎ Edit" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Click="EditProxy_Click"
+                        IsEnabled="{Binding SelectedProxy, Converter={StaticResource NotNullToBoolConverter}}"/>
+                <Button Content="🗑 Delete" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Command="{Binding DeleteSelectedCommand}"
+                        IsEnabled="{Binding SelectedProxy, Converter={StaticResource NotNullToBoolConverter}}"/>
+                <Button Content="📤 Export" Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="0,0,8,0" Click="ExportProxy_Click"/>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                           Margin="4,0" Width="1" Height="20" Background="{DynamicResource BorderBrush}"/>
+                <!-- Testing progress indicator -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                            Visibility="{Binding IsTesting, Converter={StaticResource BoolToVisibleConverter}}">
+                    <hc:LoadingCircle Width="16" Height="16" Margin="0,0,8,0"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource BodySecondary}">
+                        <Run Text="Testing "/>
+                        <Run Text="{Binding TestProgress}"/>
+                        <Run Text="/"/>
+                        <Run Text="{Binding TestTotal}"/>
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Filter Bar ── -->
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}" Padding="12,8" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Protocol:" VerticalAlignment="Center" Margin="0,0,8,0"
+                           Style="{StaticResource BodySecondary}"/>
+                <ComboBox ItemsSource="{Binding ProtocolOptions}"
+                          SelectedItem="{Binding FilterProtocol}" Width="100" Margin="0,0,16,0"/>
+                <TextBlock Text="Group:" VerticalAlignment="Center" Margin="0,0,8,0"
+                           Style="{StaticResource BodySecondary}"/>
+                <ComboBox ItemsSource="{Binding GroupOptions}"
+                          SelectedItem="{Binding FilterGroup}" Width="140" Margin="0,0,16,0"/>
+                <Button Content="Delete Group" Style="{StaticResource DangerButtonStyle}"
+                        Padding="8,4" Margin="0,0,16,0"
+                        Command="{Binding DeleteGroupCommand}"
+                        IsEnabled="{Binding FilterGroup, Converter={StaticResource NotNullToBoolConverter}}"/>
+                <TextBlock Text="Search:" VerticalAlignment="Center" Margin="0,0,8,0"
+                           Style="{StaticResource BodySecondary}"/>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Width="200" hc:InfoElement.Placeholder="host or label…"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Stats Bar ── -->
+        <Border Grid.Row="3" Background="Transparent" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource BodySecondary}" Margin="0,0,16,0">
+                    <Run Text="Total: "/>
+                    <Run Text="{Binding TotalCount}" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                </TextBlock>
+                <TextBlock Style="{StaticResource BodySecondary}" Margin="0,0,16,0">
+                    <Run Text="Active: "/>
+                    <Run Text="{Binding ActiveCount}" FontWeight="SemiBold" Foreground="{DynamicResource SuccessBrush}"/>
+                </TextBlock>
+                <TextBlock Style="{StaticResource BodySecondary}" Margin="0,0,16,0">
+                    <Run Text="Dead: "/>
+                    <Run Text="{Binding DeadCount}" FontWeight="SemiBold" Foreground="{DynamicResource ErrorBrush}"/>
+                </TextBlock>
+                <TextBlock Style="{StaticResource BodySecondary}">
+                    <Run Text="Untested: "/>
+                    <Run Text="{Binding UntestedCount}" FontWeight="SemiBold" Foreground="{DynamicResource WarningBrush}"/>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- ── DataGrid ── -->
+        <Border Grid.Row="4" Style="{StaticResource CardStyle}" Padding="0">
+            <Grid>
+                <!-- Empty state -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="{Binding Proxies.Count, Converter={StaticResource ZeroToVisibleConverter}}">
+                    <TextBlock Text="⇄" FontSize="48" HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,0,12"/>
+                    <TextBlock Text="No proxies yet" Style="{StaticResource HeadingSmall}"
+                               Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Click '+ Add' or '📥 Import' to add proxies"
+                               Style="{StaticResource BodySecondary}" HorizontalAlignment="Center"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <DataGrid ItemsSource="{Binding Proxies}"
+                          SelectedItem="{Binding SelectedProxy}"
+                          SelectionMode="Extended"
+                          IsReadOnly="True"
+                          Visibility="{Binding Proxies.Count, Converter={StaticResource NonZeroToVisibleConverter}}"
+                          VirtualizingPanel.IsVirtualizing="True">
+                    <DataGrid.Columns>
+
+                        <!-- Status dot -->
+                        <DataGridTemplateColumn Header="" Width="32" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Ellipse Width="8" Height="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="{DynamicResource WarningBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding LastTestOk}" Value="True">
+                                                        <Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding LastTestOk}" Value="False">
+                                                        <Setter Property="Fill" Value="{DynamicResource ErrorBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Protocol badge -->
+                        <DataGridTemplateColumn Header="Protocol" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Padding="4,2" CornerRadius="3" HorizontalAlignment="Left"
+                                            Background="{DynamicResource InfoBackgroundBrush}">
+                                        <TextBlock Text="{Binding Protocol}" FontSize="11"
+                                                   FontWeight="SemiBold" Foreground="{DynamicResource PrimaryBrush}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Host : Port" Binding="{Binding Address}" Width="180"/>
+                        <DataGridTextColumn Header="Label" Binding="{Binding Label}" Width="130"/>
+                        <DataGridTextColumn Header="Group" Binding="{Binding GroupTag}" Width="100"/>
+                        <DataGridTextColumn Header="Last Tested"
+                            Binding="{Binding LastTestedAt, StringFormat='{}{0:MM/dd HH:mm}'}" Width="120"/>
+                        <DataGridTextColumn Header="Avg ms" Binding="{Binding AvgResponseMs}" Width="65"/>
+
+                        <!-- Success rate badge -->
+                        <DataGridTemplateColumn Header="Success%" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0:P0}">
+                                                <Binding Path="SuccessRate"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding LastTestedAt}" Value="{x:Null}">
+                                                        <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Actions -->
+                        <DataGridTemplateColumn Header="Actions" Width="100" CanUserSort="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Edit" Style="{StaticResource ToolbarButtonStyle}"
+                                                Padding="4,2" Margin="0,0,4,0" FontSize="11"
+                                                Tag="{Binding}" Click="EditRow_Click"/>
+                                        <Button Content="Del" Style="{StaticResource ToolbarButtonStyle}"
+                                                Padding="4,2" FontSize="11"
+                                                Tag="{Binding}" Click="DeleteRow_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+
+                    <!-- Right-click context menu -->
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Edit Proxy" Click="EditProxy_Click"/>
+                            <MenuItem Header="Test This Proxy" Command="{Binding TestSelectedCommand}"/>
+                            <Separator/>
+                            <MenuItem Header="Copy host:port" Click="CopyAddress_Click"/>
+                            <Separator/>
+                            <MenuItem Header="Delete" Command="{Binding DeleteSelectedCommand}"/>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>

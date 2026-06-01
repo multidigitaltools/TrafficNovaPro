@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TrafficNova.Core</RootNamespace>
+    <!-- NotificationService uses System.Windows.Application + HandyControl Growl
+         (UI-thread toast). Enable WPF so PresentationFramework is referenced. -->
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.*" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.*" />
+    <PackageReference Include="Cronos" Version="0.8.*" />
+    <PackageReference Include="EPPlus" Version="7.*" />
+    <!-- NotificationService toast UI -->
+    <PackageReference Include="HandyControl" Version="3.*" />
+
+  </ItemGroup>
+
+</Project>
