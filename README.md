@@ -6,13 +6,17 @@
 
 **Professional Web Traffic Automation — Windows Desktop**
 
-[![Download](https://img.shields.io/badge/⬇%20Download-v1.0.0-2563EB?style=for-the-badge)](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)
-[![Trial](https://img.shields.io/badge/🆓%2014--Day%20Trial-Free-22c55e?style=for-the-badge)](https://multidigitaltools.com/products/trafficnova-pro#get)
-[![License](https://img.shields.io/badge/License-Commercial-f59e0b?style=for-the-badge)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?style=for-the-badge&logo=windows)](https://github.com/multidigitaltools/TrafficNovaPro/releases)
-[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![Download](https://img.shields.io/badge/⬇%20Download%20v1.0.0-235%20MB-2563EB?style=for-the-badge)](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)
+[![Buy](https://img.shields.io/badge/🛒%20Buy%20License-%2449%20one--time-f59e0b?style=for-the-badge)](https://multidigitaltools.com/products/trafficnova-pro)
+[![Trial](https://img.shields.io/badge/🆓%2014--Day%20Trial-No%20Credit%20Card-22c55e?style=for-the-badge)](https://multidigitaltools.com/products/trafficnova-pro)
 
-[**🛒 Buy License — $49**](https://multidigitaltools.com/products/trafficnova-pro) · [**📖 Documentation**](https://multidigitaltools.com/docs/trafficnova-pro/) · [**💬 Support**](mailto:support@multidigitaltools.com)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11%20x64-0078D4?style=flat-square&logo=windows)](https://github.com/multidigitaltools/TrafficNovaPro/releases)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
+[![Playwright](https://img.shields.io/badge/Playwright-Bundled-45ba4b?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
+[![License: Commercial](https://img.shields.io/badge/License-Commercial-737373?style=flat-square)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/multidigitaltools/TrafficNovaPro?style=flat-square&logo=github)](https://github.com/multidigitaltools/TrafficNovaPro/releases/latest)
+
+**[🌐 Product page](https://multidigitaltools.com/products/trafficnova-pro)** &nbsp;·&nbsp; **[📖 Documentation](https://multidigitaltools.com/docs/trafficnova-pro/)** &nbsp;·&nbsp; **[💻 Source on GitHub](https://github.com/multidigitaltools/TrafficNovaPro)** &nbsp;·&nbsp; **[💬 Support](mailto:support@multidigitaltools.com)**
 
 </div>
 
@@ -420,8 +424,10 @@ See [RELEASE_NOTES.md](RELEASE_NOTES.md) for full notes.
 
 <div align="center">
 
-Made by **[MultiDigitalTools](https://multidigitaltools.com)** · Copyright © 2026 · All Rights Reserved
+[![Download](https://img.shields.io/badge/⬇%20Download%20Free%20Trial-235%20MB-2563EB?style=for-the-badge)](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)
+[![Buy](https://img.shields.io/badge/🛒%20Buy%20License-%2449%20one--time-f59e0b?style=for-the-badge)](https://multidigitaltools.com/products/trafficnova-pro)
+[![GitHub](https://img.shields.io/badge/⭐%20Star%20on-GitHub-181717?style=for-the-badge&logo=github)](https://github.com/multidigitaltools/TrafficNovaPro)
 
-**[Download Free Trial](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)** · **[Buy License $49](https://multidigitaltools.com/products/trafficnova-pro)** · **[Documentation](https://multidigitaltools.com/docs/trafficnova-pro/)**
+Made by **[MultiDigitalTools](https://multidigitaltools.com)** · Copyright © 2026 · All Rights Reserved
 
 </div>
