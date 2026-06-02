@@ -3,21 +3,24 @@ bin/
 obj/
 publish/
 dist/
+
+# SQLite databases
 *.db
 *.db-shm
 *.db-wal
+
+# Runtime output
 logs/
 crashes/
-screenshots/
 traces/
-Release/
 
 # IDE
 .vs/
 *.user
 .idea/
+*.suo
 
-# Build artifacts
+# Build artifacts (generated on Windows host)
 *.ico
 *.bmp
 *.pdb
@@ -27,5 +30,29 @@ Release/
 *.pfx
 *.p12
 *.pem
-appsettings.*.json
 secrets.json
+appsettings.*.json
+
+# Release folder (binaries too large for git)
+Release/
+
+# Project-specific docs (internal only, not for public repo)
+HANDOVER.md
+HANDOVER_LOGO_ICON.md
+MASTER-TESTING-PROMPT.md
+TESTING-PROMPT.md
+STEPS.md
+MEMORY.md
+QA-ORCHESTRATION-PLAN.md
+QA_FINAL_REPORT.md
+PROGRESS.md
+BUGS.md
+AGENT_RULES.md
+branding-preview.png
+COPY-TO-UNC.sh
+scripts/
+
+# Exclude only runtime/temp screenshots
+screenshots_p8/
+screenshots_p9/
+screenshots_p10/
