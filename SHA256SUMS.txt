@@ -1,0 +1,1 @@
+710670c55a84c09bb51d094643b4d2480a681767115734ea3c965769f0000582  /tmp/trafficnova-release/Installer/TrafficNovaPro_v1.0.0_Setup.exe
