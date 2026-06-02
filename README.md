@@ -7,12 +7,12 @@
 **Professional Web Traffic Automation — Windows Desktop**
 
 [![Download](https://img.shields.io/badge/⬇%20Download-v1.0.0-2563EB?style=for-the-badge)](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)
-[![Trial](https://img.shields.io/badge/🆓%2014--Day%20Trial-Free-22c55e?style=for-the-badge)](https://multidigitaltools.com/product-trafficnova.html#get)
+[![Trial](https://img.shields.io/badge/🆓%2014--Day%20Trial-Free-22c55e?style=for-the-badge)](https://multidigitaltools.com/products/trafficnova-pro#get)
 [![License](https://img.shields.io/badge/License-Commercial-f59e0b?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D4?style=for-the-badge&logo=windows)](https://github.com/multidigitaltools/TrafficNovaPro/releases)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/10.0)
 
-[**🛒 Buy License — $49**](https://multidigitaltools.com/product-trafficnova.html) · [**📖 Documentation**](https://multidigitaltools.com/docs/trafficnova-pro/) · [**💬 Support**](mailto:support@multidigitaltools.com)
+[**🛒 Buy License — $49**](https://multidigitaltools.com/products/trafficnova-pro) · [**📖 Documentation**](https://multidigitaltools.com/docs/trafficnova-pro/) · [**💬 Support**](mailto:support@multidigitaltools.com)
 
 </div>
 
@@ -33,7 +33,7 @@
 | Session screenshot capture | ✅ Included |
 | Days of access | ✅ **14 days** |
 
-> **After trial:** Purchase a $49 one-time license key at [multidigitaltools.com/product-trafficnova.html](https://multidigitaltools.com/product-trafficnova.html) and activate from **Settings → License**.
+> **After trial:** Purchase a $49 one-time license key at [multidigitaltools.com/products/trafficnova-pro](https://multidigitaltools.com/products/trafficnova-pro) and activate from **Settings → License**.
 
 ---
 
@@ -365,7 +365,7 @@ TrafficNovaPro/
 - SerpClix: $197/month → TrafficNova pays for itself in **<1 week**
 - Babylon Traffic: $39–$199/month → saves **$420–$2,340/year**
 
-**[🛒 Buy License — $49](https://multidigitaltools.com/product-trafficnova.html)**
+**[🛒 Buy License — $49](https://multidigitaltools.com/products/trafficnova-pro)**
 
 ---
 
@@ -393,7 +393,7 @@ TrafficNovaPro/
 
 | Channel | Link |
 |---|---|
-| 🌐 Product page | [multidigitaltools.com/product-trafficnova.html](https://multidigitaltools.com/product-trafficnova.html) |
+| 🌐 Product page | [multidigitaltools.com/products/trafficnova-pro](https://multidigitaltools.com/products/trafficnova-pro) |
 | 📖 Docs portal | [multidigitaltools.com/docs/trafficnova-pro/](https://multidigitaltools.com/docs/trafficnova-pro/) |
 | 📧 Email | support@multidigitaltools.com |
 | 🐛 Bug reports | [GitHub Issues](https://github.com/multidigitaltools/TrafficNovaPro/issues) |
@@ -422,6 +422,6 @@ See [RELEASE_NOTES.md](RELEASE_NOTES.md) for full notes.
 
 Made by **[MultiDigitalTools](https://multidigitaltools.com)** · Copyright © 2026 · All Rights Reserved
 
-**[Download Free Trial](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)** · **[Buy License $49](https://multidigitaltools.com/product-trafficnova.html)** · **[Documentation](https://multidigitaltools.com/docs/trafficnova-pro/)**
+**[Download Free Trial](https://github.com/multidigitaltools/TrafficNovaPro/releases/download/v1.0.0/TrafficNovaPro_v1.0.0_Setup.exe)** · **[Buy License $49](https://multidigitaltools.com/products/trafficnova-pro)** · **[Documentation](https://multidigitaltools.com/docs/trafficnova-pro/)**
 
 </div>
