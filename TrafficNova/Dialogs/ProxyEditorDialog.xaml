@@ -1,6 +1,7 @@
 <Window x:Class="TrafficNova.Dialogs.ProxyEditorDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="/app.ico"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         Title="Proxy Editor"
         Width="440" Height="460"

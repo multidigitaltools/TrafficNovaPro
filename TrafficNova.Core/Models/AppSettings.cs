@@ -65,6 +65,16 @@ public class AppSettings
     public string LicenseKey { get; set; } = string.Empty;
     public bool IsActivated { get; set; } = false;
 
+    // BUG-086 / Phase 1 — 14-day trial bookkeeping.
+    // TrialStartUtc is null until the very first launch sets it (in App.OnStartup);
+    // null also reads as "Trial" (clock hasn't started) so display code stays sane
+    // before the first SaveAsync. The two flags prevent re-nagging the milestone
+    // popups on every launch. See TrafficNova.Core.Licensing.TrialState for the
+    // math + the canonical status string.
+    public DateTime? TrialStartUtc       { get; set; } = null;
+    public bool      TrialNotifiedDay7   { get; set; } = false;
+    public bool      TrialNotifiedDay14  { get; set; } = false;
+
     // ── Advanced / Bypass (Step 100) ────────────────────────────────────
     public string FlareSolverrUrl { get; set; } = string.Empty; // e.g. http://localhost:8191
 }

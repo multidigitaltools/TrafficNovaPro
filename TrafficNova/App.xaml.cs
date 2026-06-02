@@ -179,6 +179,12 @@ public partial class App : Application
         splash.SetStatus("Loading settings…");
         var settingsService = Services.GetRequiredService<IAppSettingsService>();
         await settingsService.LoadAsync();
+        // BUG-086 / Phase 1 — start the 14-day trial clock the very first time
+        // the app loads on this machine. Persisting here (before the test-mode
+        // bail-outs) means --enginetest / --uitest / --screenshots also stamp
+        // the clock on a virgin settings.json, which is harmless: the trial
+        // shows "14 days left" and the UI status text simply reads "Trial".
+        await EnsureTrialStartedAsync(settingsService);
         // Step 104: apply saved theme
         Services.GetRequiredService<ThemeService>().Apply(settingsService.Current.Theme);
 
@@ -269,7 +275,14 @@ public partial class App : Application
         if (settingsService.Current.CheckForUpdatesOnStartup)
             _ = CheckForUpdateAsync();
 
-        // ── 5c. First-run onboarding wizard (Step 114) ───────────────
+        // ── 5c. Trial milestone reminders (BUG-086) ─────────────────
+        // Shows ONE non-modal MessageBox at the day-7 mark and one at expiry
+        // (day 14). Flags on AppSettings prevent re-firing on later launches.
+        // Only runs in the normal UI flow — test modes have already bailed
+        // by this point, so --enginetest / --uitest never pop a dialog.
+        TryShowTrialNotifications(settingsService);
+
+        // ── 5d. First-run onboarding wizard (Step 114) ───────────────
         if (settingsService.Current.ShowOnboardingOnFirstRun)
         {
             settingsService.Current.ShowOnboardingOnFirstRun = false;
@@ -940,5 +953,53 @@ public partial class App : Application
                 $"Time: {DateTime.Now}\nType: {ex.GetType().FullName}\nMessage: {ex.Message}\n\n{ex}");
         }
         catch { /* best-effort */ }
+    }
+
+    // ── Trial helpers (BUG-086 / Phase 1) ────────────────────────────
+    private static async Task EnsureTrialStartedAsync(IAppSettingsService svc)
+    {
+        if (svc.Current.TrialStartUtc is not null) return;
+        svc.Current.TrialStartUtc = DateTime.UtcNow;
+        await svc.SaveAsync();
+        Log.Information("Trial clock started at {Start:o}", svc.Current.TrialStartUtc);
+    }
+
+    private static void TryShowTrialNotifications(IAppSettingsService svc)
+    {
+        var s = svc.Current;
+        if (s.IsActivated || s.TrialStartUtc is null) return;
+
+        var start    = s.TrialStartUtc.Value;
+        var now      = DateTime.UtcNow;
+        var expired  = TrafficNova.Core.Licensing.TrialState.IsExpired(start, now);
+        var daysLeft = TrafficNova.Core.Licensing.TrialState.DaysRemaining(start, now);
+
+        if (expired && !s.TrialNotifiedDay14)
+        {
+            s.TrialNotifiedDay14 = true;
+            _ = svc.SaveAsync();
+            MessageBox.Show(
+                "Your 14-day TrafficNova Pro trial has ended.\n\n" +
+                "To continue using all features, enter a license key on the " +
+                "Settings → License tab.",
+                "Trial Expired",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            return;
+        }
+
+        if (!expired && daysLeft <= 7 && !s.TrialNotifiedDay7)
+        {
+            s.TrialNotifiedDay7 = true;
+            _ = svc.SaveAsync();
+            var noun = daysLeft == 1 ? "day" : "days";
+            MessageBox.Show(
+                $"Your TrafficNova Pro trial expires in {daysLeft} {noun}.\n\n" +
+                "Activate your license on the Settings → License tab to keep " +
+                "all features after the trial ends.",
+                "Trial Reminder",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
     }
 }

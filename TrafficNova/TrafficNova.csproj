@@ -31,6 +31,14 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <!-- HANDOVER §11.1 — make app.ico resolvable as a runtime resource so
+       each Window's Icon="/app.ico" pack URI loads at construction.
+       Condition guards Linux-side builds where the ICO hasn't been
+       generated yet (it's produced by installer/make-icon.ps1 on Windows). -->
+  <ItemGroup Condition="Exists('app.ico')">
+    <Resource Include="app.ico" />
+  </ItemGroup>
+
   <!-- Remove WinForms implicit global usings: they collide with WPF
        (UserControl/Application/Brush). WinForms is used only via explicit
        aliases in App.xaml.cs for the tray NotifyIcon. -->

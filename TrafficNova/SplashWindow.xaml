@@ -1,6 +1,7 @@
 <Window x:Class="TrafficNova.SplashWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="/app.ico"
         Title="TrafficNova Pro"
         Width="420" Height="280"
         WindowStyle="None"

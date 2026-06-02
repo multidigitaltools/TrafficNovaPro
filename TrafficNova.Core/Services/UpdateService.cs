@@ -10,8 +10,13 @@ public class UpdateService
     private readonly ILogger<UpdateService> _log;
     private readonly HttpClient             _http;
 
-    private const string ReleasesApiUrl  = "https://api.github.com/repos/multidigitaltools/trafficnova/releases/latest";
-    private const string ReleasesPageUrl = "https://github.com/multidigitaltools/trafficnova/releases";
+    // The published repo is `multidigitaltools/TrafficNovaPro` (mixed-case).
+    // GitHub redirects lower-case → canonical for the API path but does NOT
+    // redirect the HTML releases page reliably, so we use the canonical form
+    // for both. (Earlier const referenced `multidigitaltools/trafficnova` which
+    // does not exist — auto-update silently never returned a hit.)
+    private const string ReleasesApiUrl  = "https://api.github.com/repos/multidigitaltools/TrafficNovaPro/releases/latest";
+    private const string ReleasesPageUrl = "https://github.com/multidigitaltools/TrafficNovaPro/releases";
 
     public UpdateService(ILogger<UpdateService> log)
     {

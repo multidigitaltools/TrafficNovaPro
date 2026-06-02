@@ -111,7 +111,10 @@ public partial class SettingsViewModel : ObservableObject
         MaxLogFileSizeMb                 = s.MaxLogFileSizeMb;
         DashboardRefreshSeconds          = s.DashboardRefreshSeconds;
         LicenseKey                       = s.LicenseKey;
-        LicenseStatus                    = s.IsActivated ? "Activated" : "Trial";
+        // BUG-086: was a binary "Activated" / "Trial" label; now shows the
+        // real trial countdown (e.g. "Trial — 9 days left") or "Trial expired".
+        LicenseStatus                    = TrafficNova.Core.Licensing.TrialState
+                                              .FormatStatus(s, DateTime.UtcNow);
         MachineId                        = ComputeMachineId();
         FlareSolverrUrl                  = s.FlareSolverrUrl;
     }
@@ -240,10 +243,18 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void ActivateLicense()
+    public async Task ActivateLicenseAsync()
     {
         if (string.IsNullOrWhiteSpace(LicenseKey)) { StatusMessage = "Enter a license key first."; return; }
-        LicenseStatus = "Activated";
+        // BUG-086: previously this only set the in-memory label, so the
+        // trial-status code path (which reads AppSettings.IsActivated) still
+        // showed "Trial — N days left" even after the user clicked Activate.
+        // Persist immediately so About/Settings/notifications all agree.
+        _service.Current.LicenseKey  = LicenseKey;
+        _service.Current.IsActivated = true;
+        await _service.SaveAsync();
+        LicenseStatus = TrafficNova.Core.Licensing.TrialState
+                            .FormatStatus(_service.Current, DateTime.UtcNow);
         StatusMessage = "License activated.";
     }
 
